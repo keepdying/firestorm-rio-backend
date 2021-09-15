@@ -1,5 +1,6 @@
 import dill as pickle
 from utils import *
+from datetime import datetime
 import json
 
 with open('dungeons.json', 'r') as file:
@@ -121,9 +122,14 @@ with open('runs.pickle', 'wb') as file:
 currentPlayers.sort(key=lambda x: x.fsio, reverse=True)
 
 with open('players.json', 'w') as file:
-  json.dump([ob.__dict__ for ob in currentPlayers], file, ensure_ascii=False, indent= 4)
+    json.dump([ob.__dict__ for ob in currentPlayers], file, ensure_ascii=False, indent= 4)
 
 with open('runs.json', 'w') as file:
-  json.dump([ob.__dict__ for ob in currentRuns], file, ensure_ascii=False, indent= 4)
+    json.dump([ob.__dict__ for ob in currentRuns], file, ensure_ascii=False, indent= 4)
+
+with open('lastUpdated.json', 'w') as file:
+    now = datetime.now()
+    dt_string = now.strftime("%d/%m/%Y %H:%M:%S") + " UTC"
+    json.dump(dt_string, file, ensure_ascii=False, indent= 4)
 
 exit()
