@@ -19,7 +19,7 @@ with open('dungeons.json', 'r') as file:
     dungeons = json.load(file)
     file.close()
 
-browser = webdriver.Chrome(executable_path="chromedriver.exe")
+browser = webdriver.Chrome()
 browser.get("https://firestorm-servers.com/en/challenge/index")
 
 # page = requests.get("https://firestorm-servers.com/en/challenge/index")  # get challenges page
