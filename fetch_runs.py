@@ -1,9 +1,11 @@
+from bs4 import BeautifulSoup
 from utils import *
 from datetime import datetime
 import re
 import time as sleep
 import dill as pickle
 import json
+
 from selenium import webdriver
 
 try:
