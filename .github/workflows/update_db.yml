@@ -4,9 +4,11 @@ name: Update DB
 
 # Controls when the workflow will run
 on:
+  workflow_dispatch:
+  
   push:
     branches: [ master ]
-  workflow_dispatch:
+    
   schedule:
   - cron: '*/5 * * * *'
   
