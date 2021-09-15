@@ -62,3 +62,21 @@ jobs:
           branch: master
           message: 'Updated DB (Github Actions)'
           push: true
+          
+          
+      - name: Clone module
+        env:
+          GITHUB_TOKEN: ${{ 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 }}
+        run: |
+
+          git clone https://keepdying:$GITHUB_TOKEN@github.com/keepdying/firestorm-rio
+          cp runs.json firestorm-rio/src/ 
+          cp players.json firestorm-rio/src/
+          cd firestorm-rio
+          git config --global user.name "Github Actions"
+          git config --global user.email "yunusemre34tr@gmail.com"
+          git add src/runs.json
+          git add src/players.json
+          git commit -m "Updated DB"
+          git push
+
