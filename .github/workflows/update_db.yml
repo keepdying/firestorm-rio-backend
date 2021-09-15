@@ -70,7 +70,7 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
 
-          git clone https://keepdying:$GITHUB_TOKEN@github.com/keepdying/firestorm-rio
+          git clone https://keepdying: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@github.com/keepdying/firestorm-rio
           cp runs.json firestorm-rio/src/ 
           cp players.json firestorm-rio/src/
           cp lastUpdated.json firestorm-rio/src/
