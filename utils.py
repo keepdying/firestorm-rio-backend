@@ -1,6 +1,4 @@
-import requests
 import json
-from bs4 import BeautifulSoup
 from datetime import timedelta
 
 with open('dungeons.json', 'r') as file:

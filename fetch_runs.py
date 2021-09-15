@@ -1,8 +1,5 @@
-from bs4 import BeautifulSoup
-import requests
 from utils import *
 from datetime import datetime
-import sqlite3 as sql
 import re
 import time as sleep
 import dill as pickle
