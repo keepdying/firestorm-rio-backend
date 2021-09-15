@@ -125,3 +125,5 @@ with open('players.json', 'w') as file:
 
 with open('runs.json', 'w') as file:
   json.dump([ob.__dict__ for ob in currentRuns], file, ensure_ascii=False, indent= 4)
+
+exit()

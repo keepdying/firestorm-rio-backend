@@ -86,4 +86,4 @@ with open('runs.pickle', 'wb') as file:
     browser.close()
     print("wrote {first} new entries with total of {second} & closed runs file".format(first=counter,
                                                                                        second=len(currentRuns)))
-    exit(1);
+exit();
