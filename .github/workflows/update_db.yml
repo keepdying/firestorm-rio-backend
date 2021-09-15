@@ -64,12 +64,10 @@ jobs:
           push: true
           
           
-      - name: Clone module
-        env:
-          GITHUB_TOKEN: ${{ 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 }}
+      - name: Push to firestorm-rio
         run: |
 
-          git clone https://keepdying:$GITHUB_TOKEN@github.com/keepdying/firestorm-rio
+          git clone https://keepdying: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@github.com/keepdying/firestorm-rio
           cp runs.json firestorm-rio/src/ 
           cp players.json firestorm-rio/src/
           cd firestorm-rio
