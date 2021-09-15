@@ -7,8 +7,9 @@ on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
     branches: [ master ]
-  pull_request:
-    branches: [ master ]
+  schedule:
+    - cron:  '15 * * * *'
+
 
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
@@ -70,11 +71,13 @@ jobs:
           git clone https://keepdying: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@github.com/keepdying/firestorm-rio
           cp runs.json firestorm-rio/src/ 
           cp players.json firestorm-rio/src/
+          cp lastUpdated.json firestorm-rio/src/
           cd firestorm-rio
           git config --global user.name "Github Actions"
           git config --global user.email "yunusemre34tr@gmail.com"
           git add src/runs.json
           git add src/players.json
+          git add src/lastUpdated.json
           git commit -m "Updated DB"
           git push
 
