@@ -53,12 +53,28 @@ jobs:
       - name: Run update_playes.py
         run: pipenv run python update_players.py 
                
-      # Runs a single command using the runners shell
-      - name: Run a one-line script
-        run: echo Hello, world!
-
-      # Runs a set of commands using the runners shell
-      - name: Run a multi-line script
+      - name: Add & Commit
+        uses: EndBug/add-and-commit@v7.3.0
+        with:
+          add: '["runs.pickle", "players.pickle"]'
+          author_name: Github Actions
+          author_email: yunusemre34tr@gmail.com
+          branch: master
+          message: 'Updated DB (Github Actions)'
+          push: true
+          
+          
+      - name: Push to firestorm-rio
         run: |
-          echo Add other actions to build,
-          echo test, and deploy your project.
+
+          git clone https://keepdying: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@github.com/keepdying/firestorm-rio
+          cp runs.json firestorm-rio/src/ 
+          cp players.json firestorm-rio/src/
+          cd firestorm-rio
+          git config --global user.name "Github Actions"
+          git config --global user.email "yunusemre34tr@gmail.com"
+          git add src/runs.json
+          git add src/players.json
+          git commit -m "Updated DB"
+          git push
+
