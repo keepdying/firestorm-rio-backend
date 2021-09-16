@@ -68,7 +68,6 @@ for dungeon in dungeons:
         score = round(scaleScore(time, dungeon["timer"], lvl), 2)
 
         rid = dungeon["id"][5:8] + str(lvl).zfill(2) + str(int(rid)) + str(pids[0])
-        print(rid)
         # ensure to not write a run twice
         if currentRuns:
             for idx, run1 in enumerate(currentRuns):
