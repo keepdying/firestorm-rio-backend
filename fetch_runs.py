@@ -48,9 +48,9 @@ for dungeon in dungeons:
 
         # get player ids
         players_data = data[3].find_all("a", href=True)
-        pid = []
+        pids = []
         for player in players_data:
-            pid.append(re.search(r"[^/]+$", player['href']).group())
+            pids.append(re.search(r"[^/]+$", player['href']).group())
 
         # player names
         pnames = []
@@ -67,18 +67,20 @@ for dungeon in dungeons:
         # calculate score
         score = round(scaleScore(time, dungeon["timer"], lvl), 2)
 
+        rid = dungeon["id"][5:8] + str(lvl).zfill(2) + str(int(rid)) + str(pids[0])
+        print(rid)
         # ensure to not write a run twice
         if currentRuns:
             for idx, run1 in enumerate(currentRuns):
                 if rid == run1.rid:
                     break
                 elif idx == (len(currentRuns) - 1):
-                    currentRuns.append(MythicRun(rid, pid, pnames, int(dungeon["id"][5:8]), lvl, time, score))
+                    currentRuns.append(MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score))
                     counter += 1
                     break
         else:
             counter += 1
-            currentRuns.append(MythicRun(rid, pid, pnames, int(dungeon["id"][5:8]), lvl, time, score))
+            currentRuns.append(MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score))
 
 with open('runs.pickle', 'wb') as file:
     pickle.dump(currentRuns, file)
@@ -86,4 +88,3 @@ with open('runs.pickle', 'wb') as file:
     browser.close()
     print("wrote {first} new entries with total of {second} & closed runs file".format(first=counter,
                                                                                        second=len(currentRuns)))
-exit();
