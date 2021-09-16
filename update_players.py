@@ -1,6 +1,6 @@
 import dill as pickle
 from utils import *
-from datetime import datetime
+from datetime import datetime, timedelta
 import json
 
 with open('dungeons.json', 'r') as file:
@@ -90,7 +90,6 @@ for run in currentRuns: # loop through runs
 
 
 for player in currentPlayers:
-    # player.sanitycheck(currentRuns) # check if we have double runs?
     player.updatefsio(currentRuns) # calculate scores
 
 newCurrentRuns = [] # Delete unused runs
@@ -105,6 +104,7 @@ for idx, run in enumerate(currentRuns):
         if loopBreak:
             break
 
+currentRuns.sort(key=lambda x: x.rid, reverse=False)
 currentPlayers.sort(key=lambda x: x.fsio, reverse=True)
 
 with open('players.pickle', 'wb') as file:
@@ -113,23 +113,22 @@ with open('players.pickle', 'wb') as file:
     print("wrote {first} players & closed players file".format(first=len(currentPlayers)))
 
 with open('runs.pickle', 'wb') as file:
-    pickle.dump(currentRuns, file)
+    pickle.dump(newCurrentRuns, file)
     file.close()
     print(
-        f"deleted {(len(currentRuns) - len(currentRuns))} unused entries and wrote {len(currentRuns)} runs & closed runs file")
-
-# currentRuns.sort(key=lambda x: x.rid, reverse=False)
-currentPlayers.sort(key=lambda x: x.fsio, reverse=True)
+        f"deleted {(len(currentRuns) - len(newCurrentRuns))} unused entries and wrote {len(newCurrentRuns)} runs & closed runs file")
 
 with open('players.json', 'w') as file:
     json.dump([ob.__dict__ for ob in currentPlayers], file, ensure_ascii=False, indent= 4)
 
 with open('runs.json', 'w') as file:
-    json.dump([ob.__dict__ for ob in currentRuns], file, ensure_ascii=False, indent= 4)
+    json.dump([ob.__dict__ for ob in newCurrentRuns], file, ensure_ascii=False, indent= 4)
 
 with open('lastUpdated.json', 'w') as file:
     now = datetime.now()
-    dt_string = now.strftime("%d/%m/%Y %H:%M:%S") + " UTC"
+    stime_delta = timedelta(hours=2)
+    stime = now + stime_delta
+    dt_string = stime.strftime("%d/%m/%Y %H:%M:%S") + " GMT+2"
     json.dump(dt_string, file, ensure_ascii=False, indent= 4)
 
 exit()
