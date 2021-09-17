@@ -33,6 +33,7 @@ except:
 debugrid = 1
 
 for run in currentRuns: # loop through runs
+    run.updateScore() # calculate scores again
     for idx, pid in enumerate(run.pids): # get pids
         pidx, player = returnPlayer(currentPlayers, pid) #get player with pid
         if run.rid == debugrid:
@@ -113,16 +114,16 @@ with open('players.pickle', 'wb') as file:
     print("wrote {first} players & closed players file".format(first=len(currentPlayers)))
 
 with open('runs.pickle', 'wb') as file:
-    pickle.dump(newCurrentRuns, file)
+    pickle.dump(currentRuns, file)
     file.close()
     print(
-        f"deleted {(len(currentRuns) - len(newCurrentRuns))} unused entries and wrote {len(newCurrentRuns)} runs & closed runs file")
+        f"there are {(len(currentRuns) - len(newCurrentRuns))} unused entries, wrote {len(currentRuns)} runs & closed runs file")
 
 with open('players.json', 'w') as file:
     json.dump([ob.__dict__ for ob in currentPlayers], file, ensure_ascii=False, indent= 4)
 
 with open('runs.json', 'w') as file:
-    json.dump([ob.__dict__ for ob in newCurrentRuns], file, ensure_ascii=False, indent= 4)
+    json.dump([ob.__dict__ for ob in currentRuns], file, ensure_ascii=False, indent= 4)
 
 with open('lastUpdated.json', 'w') as file:
     now = datetime.now()

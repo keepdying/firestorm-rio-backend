@@ -24,7 +24,7 @@ class MythicRun:
             if self.dung == int(dungeon["id"][5:8]):
                 dungTimers = dungeon["timer"]
 
-        max_time = dungTimers[0] + 600  # assume max deplete time 10 min
+        max_time = dungTimers[0] + 5  # assume max deplete time 5 sec
         deplete_score = keylvltoscore[self.lvl - 2] + 0.01
         timed_score = keylvltoscore[self.lvl]
         up_score = keylvltoscore[self.lvl + 1]
