@@ -40,7 +40,9 @@ for run in currentRuns:  # loop through runs
 
         else:  # if exists
             currentPlayers[pidx].name = run.pnames[idx]
-            currentPlayers[pidx].pclass = run.pclasses[idx]
+            if not run.pclasses[idx] is None:
+                currentPlayers[pidx].pclass = run.pclasses[idx]
+
             playerBruns = currentPlayers[pidx].bruns.copy()
 
             for idxx, pbrid in enumerate(playerBruns):  # loop through brun ids
