@@ -46,7 +46,6 @@ for dungeon in dungeons:
         date_str = data[2].get_text().strip() + ", " + data[4].get_text().strip()
         date_object = datetime.strptime(date_str, "%H:%M:%S, %B %d, %Y")
         rid = date_object.timestamp()
-        rid = dungeon["id"][5:8] + str(lvl).zfill(2) + str(int(rid)) + str(pids[0])
 
         # get timestamp
         timestamp = int(run.attrs['scrap-timestamp'])
@@ -74,6 +73,8 @@ for dungeon in dungeons:
         # calculate score
         score = round(scaleScore(time, dungeon["timer"], lvl), 2)
 
+        # generate rid p2
+        rid = dungeon["id"][5:8] + str(lvl).zfill(2) + str(int(rid)) + str(pids[0])
         # ensure to not write a run twice
         if currentRuns:
             for idx, run1 in enumerate(currentRuns):
