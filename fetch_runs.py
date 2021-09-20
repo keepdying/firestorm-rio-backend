@@ -33,6 +33,7 @@ total_counter = 0
 for dungeon in dungeons:
     counter = 0
     affix_counter = 0
+    timestamp_counter = 0
     if dungeon["id"] != "1594_247":
         browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
         sleep.sleep(2)
@@ -95,15 +96,12 @@ for dungeon in dungeons:
                 if not hasattr(currentRuns[idx], 'affixes'):
                     currentRuns[idx].affixes = None
 
-                if not currentRuns[idx].timestamp is None:
-
-                    currentRuns[idx].affixes = affixes
-
-                # if currentRuns[idx].timestamp is None:
-                #     extracted_timestamp = int(run1.rid[5: (len(run1.rid) - len(run1.pids[0]))])
-                #     dt_obj = datetime.fromtimestamp(extracted_timestamp)
-                #     dt_obj = dt_obj.replace(hour=0, minute=0, second=0)
-                #     currentRuns[idx].timestamp = int(dt_obj.timestamp())
+                if currentRuns[idx].timestamp is None:
+                    extracted_timestamp = int(run1.rid[5: (len(run1.rid) - len(run1.pids[0]))])
+                    dt_obj = datetime.fromtimestamp(extracted_timestamp)
+                    dt_obj = dt_obj.replace(hour=0, minute=0, second=0)
+                    currentRuns[idx].timestamp = int(dt_obj.timestamp())
+                    timestamp_counter += 1
 
                 if rid == run1.rid:
 
@@ -133,8 +131,9 @@ for dungeon in dungeons:
             currentRuns.append(
                 MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses, affixes))
 
-        print(dungeon["abbr"] + ", " + str(counter) + " new runs added.")
-        print(dungeon["abbr"] + ", " + str(affix_counter) + " affixes updated.")
+    print(dungeon["abbr"] + ", " + str(counter) + " new runs added.")
+    print(dungeon["abbr"] + ", " + str(affix_counter) + " affixes updated.")
+    print(dungeon["abbr"] + ", " + str(timestamp_counter) + " timestamp fixed.")
 
 with open('runs.pickle', 'wb') as file:
     pickle.dump(currentRuns, file)
