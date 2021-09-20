@@ -40,8 +40,9 @@ for run in currentRuns:  # loop through runs
 
         else:  # if exists
             currentPlayers[pidx].name = run.pnames[idx]
-            if not run.pclasses is None:
-                currentPlayers[pidx].pclass = run.pclasses[idx]
+            if currentPlayers[pidx].pclass is None or currentPlayers[pidx].pclass == "noclass":
+                if not run.pclasses is None:
+                    currentPlayers[pidx].pclass = run.pclasses[idx]
 
             playerBruns = currentPlayers[pidx].bruns.copy()
 

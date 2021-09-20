@@ -10,7 +10,7 @@ with open('keylvltoscore.json', 'r') as file:
     file.close()
 
 class MythicRun:
-    def __init__(self, rid, pids, pnames, dung, lvl, time, score, timestamp, pclasses):
+    def __init__(self, rid, pids, pnames, dung, lvl, time, score, timestamp, pclasses, affixes):
         self.rid = rid
         self.pids = pids
         self.pnames = pnames
@@ -20,6 +20,7 @@ class MythicRun:
         self.score = score
         self.timestamp = timestamp
         self.pclasses = pclasses
+        self.affixes = affixes
 
     def updateScore(self):
         for dungeon in dungeons:

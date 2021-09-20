@@ -23,11 +23,16 @@ with open('dungeons.json', 'r') as file:
 
 browser = webdriver.Chrome()
 browser.get("https://firestorm-servers.com/en/challenge/index")
+sleep.sleep(3)
+affixes = browser.find_elements_by_css_selector('#challenge-content > div > a')  # get affix ids
+for i, affix in enumerate(affixes):
+    affixes[i] = int(affix.get_attribute('href')[28:])
 
 # page = requests.get("https://firestorm-servers.com/en/challenge/index")  # get challenges page
-counter = 0
+total_counter = 0
 for dungeon in dungeons:
-
+    counter = 0
+    affix_counter = 0
     if dungeon["id"] != "1594_247":
         browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
         sleep.sleep(2)
@@ -82,7 +87,23 @@ for dungeon in dungeons:
                     currentRuns[idx].timestamp = None
 
                 if not hasattr(currentRuns[idx], 'pclasses'):
-                    currentRuns[idx].pclasses = None
+                    currentRuns[idx].pclasses = ["noclass", "noclass", "noclass", "noclass", "noclass"]
+
+                if currentRuns[idx].pclasses is None:
+                    currentRuns[idx].pclasses = ["noclass", "noclass", "noclass", "noclass", "noclass"]
+
+                if not hasattr(currentRuns[idx], 'affixes'):
+                    currentRuns[idx].affixes = None
+
+                if not currentRuns[idx].timestamp is None:
+
+                    currentRuns[idx].affixes = affixes
+
+                # if currentRuns[idx].timestamp is None:
+                #     extracted_timestamp = int(run1.rid[5: (len(run1.rid) - len(run1.pids[0]))])
+                #     dt_obj = datetime.fromtimestamp(extracted_timestamp)
+                #     dt_obj = dt_obj.replace(hour=0, minute=0, second=0)
+                #     currentRuns[idx].timestamp = int(dt_obj.timestamp())
 
                 if rid == run1.rid:
 
@@ -92,22 +113,32 @@ for dungeon in dungeons:
                     if currentRuns[idx].pclasses is None:
                         currentRuns[idx].pclasses = pclasses
 
+                    if currentRuns[idx].affixes is None:
+                        currentRuns[idx].affixes = affixes
+                        affix_counter += 1
+
                     break
 
                 elif idx == (len(currentRuns) - 1):
                     currentRuns.append(
-                        MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses))
+                        MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses,
+                                  affixes))
+                    total_counter += 1
                     counter += 1
                     break
 
         else:
+            total_counter += 1
             counter += 1
             currentRuns.append(
-                MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses))
+                MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses, affixes))
+
+        print(dungeon["abbr"] + ", " + str(counter) + " new runs added.")
+        print(dungeon["abbr"] + ", " + str(affix_counter) + " affixes updated.")
 
 with open('runs.pickle', 'wb') as file:
     pickle.dump(currentRuns, file)
     file.close()
-    browser.close()
+    # browser.close()
     print("wrote {first} new entries with total of {second} & closed runs file".format(first=counter,
                                                                                        second=len(currentRuns)))
