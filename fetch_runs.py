@@ -121,21 +121,19 @@ for dungeon in dungeons:
                     currentRuns.append(
                         MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses,
                                   affixes))
-                    total_counter += 1
                     counter += 1
                     break
 
         else:
-            total_counter += 1
             counter += 1
             currentRuns.append(
                 MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses, affixes))
 
     print(dungeon["abbr"] + ", " + str(counter) + " new runs added.")
-
+    total_counter += counter
 with open('runs.pickle', 'wb') as file:
     pickle.dump(currentRuns, file)
     file.close()
     # browser.close()
-    print("wrote {first} new entries with total of {second} & closed runs file".format(first=counter,
+    print("wrote {first} new entries with total of {second} & closed runs file".format(first=total_counter,
                                                                                        second=len(currentRuns)))
