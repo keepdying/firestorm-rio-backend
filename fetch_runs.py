@@ -36,7 +36,7 @@ for dungeon in dungeons:
     timestamp_counter = 0
     if dungeon["id"] != "1594_247":
         browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
-        sleep.sleep(2)
+        sleep.sleep(5)
         dungSelector = "#pve_carousel > div > div.item.active > div.img_slider.dungeon_{first} > img".format(
             first=dungeon["id"])
         browser.find_element_by_css_selector(dungSelector).click()

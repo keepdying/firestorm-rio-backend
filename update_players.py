@@ -77,7 +77,6 @@ for idx, run in enumerate(currentRuns):
         if loopBreak:
             break
 
-currentRuns.sort(key=lambda x: x.timestamp, reverse=False)
 currentPlayers.sort(key=lambda x: x.fsio, reverse=True)
 
 with open('players.pickle', 'wb') as file:
