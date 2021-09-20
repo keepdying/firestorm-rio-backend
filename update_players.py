@@ -99,9 +99,6 @@ with open('runs.json', 'w') as file:
 
 with open('lastUpdated.json', 'w') as file:
     now = datetime.now()
-    stime_delta = timedelta(hours=2)
-    stime = now + stime_delta
-    dt_string = stime.strftime("%d/%m/%Y %H:%M:%S") + " GMT+2"
-    json.dump(dt_string, file, ensure_ascii=False, indent=4)
+    json.dump(int(now.timestamp()), file, ensure_ascii=False, indent=4)
 
 exit()
