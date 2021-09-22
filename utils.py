@@ -9,6 +9,7 @@ with open('keylvltoscore.json', 'r') as file:
     keylvltoscore = json.load(file)
     file.close()
 
+
 class MythicRun:
     def __init__(self, rid, pids, pnames, dung, lvl, time, score, timestamp, pclasses, affixes):
         self.rid = rid
@@ -27,15 +28,35 @@ class MythicRun:
             if self.dung == int(dungeon["id"][5:8]):
                 dungTimers = dungeon["timer"]
 
-        max_time = dungTimers[0] + 5  # assume max deplete time 5 sec
-        deplete_score = keylvltoscore[self.lvl - 2] + 0.01
+        max_soft_deplete_time = (dungTimers[0] * 2.5)  # assume max deplete time 5 sec
+
+        soft_deplete_start_score = keylvltoscore[self.lvl - 1] + 0.01
+        soft_deplete_125 = keylvltoscore[self.lvl - 2] + 0.01
+        soft_deplete_150 = keylvltoscore[self.lvl - 2] + 0.01 if (self.lvl - 3) < 0 else soft_deplete_150 = keylvltoscore[self.lvl - 3] + 0.01
+        soft_deplete_200 = keylvltoscore[self.lvl - 2] + 0.01 if (self.lvl - 4) < 0 else soft_deplete_150 = keylvltoscore[self.lvl - 4] + 0.01
+        soft_deplete_250 = keylvltoscore[self.lvl - 2] + 0.01 if (self.lvl - 5) < 0 else soft_deplete_150 = keylvltoscore[self.lvl - 5] + 0.01
+
         timed_score = keylvltoscore[self.lvl]
         up_score = keylvltoscore[self.lvl + 1]
 
-        if self.time >= max_time:  # if went pepegas
-            self.score = deplete_score
-        elif max_time > self.time > dungTimers[0]:  # if depleted
-            self.score = (((self.time - max_time) / (max_time - dungTimers[0])) * (deplete_score - timed_score)) + deplete_score
+        if self.time >= max_soft_deplete_time:  # if went beyond
+            self.score = soft_deplete_250
+
+        elif (dungTimers[0] * 2.5) > self.time >= (dungTimers[0] * 2):  # if between (2 - 2.5) * dungtimer
+            self.score = (((self.time - (dungTimers[0] * 2.5)) / ((dungTimers[0] * 2.50) - (dungTimers[0] * 2))) * (
+                    soft_deplete_250 - soft_deplete_200)) + soft_deplete_250
+
+        elif (dungTimers[0] * 2) > self.time >= (dungTimers[0] * 1.50):  # if between (1.50 - 2) * dungtimer
+            self.score = (((self.time - (dungTimers[0] * 2)) / ((dungTimers[0] * 2) - (dungTimers[0] * 1.50))) * (
+                    soft_deplete_200 - soft_deplete_150)) + soft_deplete_200
+
+        elif (dungTimers[0] * 1.50) > self.time >= (dungTimers[0] * 1.25):  # if between (1.25 - 1.50) * dungtimer
+            self.score = (((self.time - (dungTimers[0] * 1.50)) / ((dungTimers[0] * 1.50) - (dungTimers[0] * 1.25))) * (
+                    soft_deplete_150 - soft_deplete_125)) + soft_deplete_150
+
+        elif (dungTimers[0] * 1.25) > self.time > dungTimers[0]:  # if between (1 - 1.25) * dungtimer
+            self.score = (((self.time - (dungTimers[0] * 1.25)) / ((dungTimers[0] * 1.25) - dungTimers[0])) * (
+                    soft_deplete_125 - soft_deplete_start_score)) + soft_deplete_125
         else:
             self.score = ((self.time / dungTimers[0]) * (timed_score - up_score)) + up_score
 
@@ -63,28 +84,6 @@ class Player:
         self.fsio = newio
         self.fsio = round(self.fsio, 2)
 
-    # def sanitycheck(self, runList):
-    #     newbruns = []
-    #     for brun1 in self.bruns:
-    #         for brun2 in self.bruns:
-    #
-    #             if brun1 == brun2:
-    #                 continue
-    #
-    #             if newbruns.count(brun2) > 0:
-    #                 continue
-    #
-    #             _, run1 = returnRun(runList, brun1)
-    #             _, run2 = returnRun(runList, brun2)
-    #
-    #             if (run1.dung == run2.dung) and (run1.lvl < run2.lvl):
-    #                 continue
-    #
-    #             newbruns.append(brun1)
-    #
-    #     self.bruns = newbruns
-
-
 
 def returnPlayer(playerList, id):
     for idx, player in enumerate(playerList):
@@ -99,10 +98,12 @@ def returnRun(runList, id):
             return idx, run
     return None, None
 
+
 def returnPlayerByName(name, playerlist):
     for idx, player in enumerate(playerlist):
         if player.name == name:
             return player
+
 
 def returnCompletedDungeons(player, runList):
     completedDungs = []
@@ -113,6 +114,7 @@ def returnCompletedDungeons(player, runList):
                 completedDungs.append(dungeon["name"])
     return completedDungs
 
+
 def returnRuns(player, runList):
     completedRuns = []
     for brun in player.bruns:
@@ -120,26 +122,57 @@ def returnRuns(player, runList):
         completedRuns.append(run)
     return completedRuns
 
+
 def sanityCheck(runList, playerList):
     for player in playerList:
         player.sanitycheck(runList)
     return playerList
 
-def scaleScore(timer, dungTimers, dungLevel):
-    max_time = dungTimers[0] + 600  # assume max deplete time 10 min
-    deplete_score = keylvltoscore[dungLevel - 2] + 0.01
-    timed_score = keylvltoscore[dungLevel]
-    up_score = keylvltoscore[dungLevel + 1]
-    if timer >= max_time: # if went pepegas
-        return deplete_score
-    elif max_time > timer > dungTimers[0]: # if depleted
-        return (((timer - max_time) / (max_time - dungTimers[0])) * (deplete_score - timed_score)) + deplete_score
+
+def scaleScore(time, dungTimers, lvl):
+    max_soft_deplete_time = (dungTimers[0] * 2.5)  # assume max soft deplete time is over 250% of timer.
+
+    soft_deplete_start_score = keylvltoscore[lvl - 1] + 0.01
+    soft_deplete_125 = keylvltoscore[lvl - 2] + 0.01
+    soft_deplete_150 = keylvltoscore[lvl - 2] + 0.01 if (lvl - 3) < 0 else soft_deplete_150 = keylvltoscore[
+                                                                                                            lvl - 3] + 0.01
+    soft_deplete_200 = keylvltoscore[lvl - 2] + 0.01 if (lvl - 4) < 0 else soft_deplete_150 = keylvltoscore[
+                                                                                                            lvl - 4] + 0.01
+    soft_deplete_250 = keylvltoscore[lvl - 2] + 0.01 if (lvl - 5) < 0 else soft_deplete_150 = keylvltoscore[
+                                                                                                            lvl - 5] + 0.01
+
+    timed_score = keylvltoscore[lvl]
+    up_score = keylvltoscore[lvl + 1]
+
+    if time >= max_soft_deplete_time:  # if went beyond
+        score = soft_deplete_250
+
+    elif (dungTimers[0] * 2.5) > time >= (dungTimers[0] * 2):  # if between (2 - 2.5) * dungtimer
+        score = (((time - (dungTimers[0] * 2.5)) / ((dungTimers[0] * 2.50) - (dungTimers[0] * 2))) * (
+                soft_deplete_250 - soft_deplete_200)) + soft_deplete_250
+
+    elif (dungTimers[0] * 2) > time >= (dungTimers[0] * 1.50):  # if between (1.50 - 2) * dungtimer
+        score = (((time - (dungTimers[0] * 2)) / ((dungTimers[0] * 2) - (dungTimers[0] * 1.50))) * (
+                soft_deplete_200 - soft_deplete_150)) + soft_deplete_200
+
+    elif (dungTimers[0] * 1.50) > time >= (dungTimers[0] * 1.25):  # if between (1.25 - 1.50) * dungtimer
+        score = (((time - (dungTimers[0] * 1.50)) / ((dungTimers[0] * 1.50) - (dungTimers[0] * 1.25))) * (
+                soft_deplete_150 - soft_deplete_125)) + soft_deplete_150
+
+    elif (dungTimers[0] * 1.25) > time > dungTimers[0]:  # if between (1 - 1.25) * dungtimer
+        score = (((time - (dungTimers[0] * 1.25)) / ((dungTimers[0] * 1.25) - dungTimers[0])) * (
+                soft_deplete_125 - soft_deplete_start_score)) + soft_deplete_125
     else:
-        return ((timer / dungTimers[0]) * (timed_score - up_score)) + up_score
+        score = ((time / dungTimers[0]) * (timed_score - up_score)) + up_score
+
+    score = round(score, 2)
+    return score
 
 def printTop(currentPlayers):
     for i in range(10):
-        print(str(i+1) +". "+ currentPlayers[i].name + ", " + str(currentPlayers[i].fsio) + ", Completed Dungeons: " + str(len(currentPlayers[i].bruns)))
+        print(str(i + 1) + ". " + currentPlayers[i].name + ", " + str(
+            currentPlayers[i].fsio) + ", Completed Dungeons: " + str(len(currentPlayers[i].bruns)))
+
 
 def getDungName(dungid):
     for dungeon in dungeons:
@@ -154,5 +187,6 @@ def printPlayer(playerName, currentPlayers, currentRuns):
         print("Player Not Found!")
     print(player.name + ", " + str(player.fsio))
     for rid in player.bruns:
-        _ , run = returnRun(currentRuns, rid)
-        print(getDungName(run.dung) + ', Level: ' + str(run.lvl) + ', Time: ' + str(timedelta(seconds= run.time)) + ', Score: ' + str(run.score))
+        _, run = returnRun(currentRuns, rid)
+        print(getDungName(run.dung) + ', Level: ' + str(run.lvl) + ', Time: ' + str(
+            timedelta(seconds=run.time)) + ', Score: ' + str(run.score))
