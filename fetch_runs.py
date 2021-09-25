@@ -23,7 +23,7 @@ with open('dungeons.json', 'r') as file:
 
 browser = webdriver.Chrome()
 browser.get("https://firestorm-servers.com/en/challenge/index")
-sleep.sleep(3)
+sleep.sleep(15)
 affixes = browser.find_elements_by_css_selector('#challenge-content > div > a')  # get affix ids
 for i, affix in enumerate(affixes):
     affixes[i] = int(affix.get_attribute('href')[28:])
@@ -36,7 +36,7 @@ for dungeon in dungeons:
     timestamp_counter = 0
     if dungeon["id"] != "1594_247":
         browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
-        sleep.sleep(5)
+        sleep.sleep(10)
         dungSelector = "#pve_carousel > div > div.item.active > div.img_slider.dungeon_{first} > img".format(
             first=dungeon["id"])
         browser.find_element_by_css_selector(dungSelector).click()
