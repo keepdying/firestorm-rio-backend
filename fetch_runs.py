@@ -23,7 +23,7 @@ with open('dungeons.json', 'r') as file:
 
 browser = webdriver.Chrome()
 browser.get("https://firestorm-servers.com/en/challenge/index")
-sleep.sleep(15)
+sleep.sleep(5)
 affixes = browser.find_elements_by_css_selector('#challenge-content > div > a')  # get affix ids
 for i, affix in enumerate(affixes):
     affixes[i] = int(affix.get_attribute('href')[28:])
