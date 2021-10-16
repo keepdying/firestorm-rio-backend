@@ -100,8 +100,8 @@ for dungeon in dungeons:
 
                 if rid == run1.rid:
 
-                    currentRuns[idx]["pids"] = pids
-                    currentRuns[idx]["pnames"] = pnames
+                    currentRuns[idx].pids = pids
+                    currentRuns[idx].pnames = pnames
 
                     break
 
