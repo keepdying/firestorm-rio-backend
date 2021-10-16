@@ -100,15 +100,8 @@ for dungeon in dungeons:
 
                 if rid == run1.rid:
 
-                    # if currentRuns[idx].timestamp is None:
-                    #     currentRuns[idx].timestamp = timestamp
-                    #
-                    # if currentRuns[idx].pclasses is None:
-                    #     currentRuns[idx].pclasses = pclasses
-                    #
-                    # if currentRuns[idx].affixes is None:
-                    #     currentRuns[idx].affixes = affixes
-                    #     affix_counter += 1
+                    currentRuns[idx]["pids"] = pids
+                    currentRuns[idx]["pnames"] = pnames
 
                     break
 
