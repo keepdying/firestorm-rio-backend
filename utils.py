@@ -25,7 +25,7 @@ class MythicRun:
 
     def updateScore(self):
         for dungeon in dungeons:
-            if self.dung == int(dungeon["id"][5:8]):
+            if self.dung == dungeon["id"]:
                 dungTimers = dungeon["timer"]
 
         max_soft_deplete_time = (dungTimers[0] * 2.5)  # assume max deplete time 5 sec

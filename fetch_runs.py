@@ -22,7 +22,7 @@ with open('dungeons.json', 'r') as file:
     file.close()
 
 browser = webdriver.Chrome()
-browser.get("https://firestorm-servers.com/en/challenge/index")
+browser.get("https://firestorm-servers.com/en/challenge/index/8")
 sleep.sleep(5)
 affixes = browser.find_elements_by_css_selector('#challenge-content > div > a')  # get affix ids
 for i, affix in enumerate(affixes):
@@ -34,13 +34,16 @@ for dungeon in dungeons:
     counter = 0
     affix_counter = 0
     timestamp_counter = 0
-    if dungeon["id"] != "1594_247":
+    if dungeon["id"] != "2284_380":
         browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
         sleep.sleep(2)
         dungSelector = "#pve_carousel > div > div.item.active > div.img_slider.dungeon_{first} > img".format(
             first=dungeon["id"])
         browser.find_element_by_css_selector(dungSelector).click()
     sleep.sleep(1)
+    if dungeon["id"] == "2285_381":
+        print("Skipping {}".format(dungeon["name"]))
+        continue
     soup = BeautifulSoup(browser.page_source, "html.parser")  # parse page
     runs_table = soup.find(id="challenge-results")  # find table
     runs_tbody = runs_table.find("tbody").find_all("tr")
@@ -91,13 +94,6 @@ for dungeon in dungeons:
                 if not hasattr(currentRuns[idx], 'affixes'):
                     currentRuns[idx].affixes = None
 
-                # if currentRuns[idx].timestamp is None:
-                #     extracted_timestamp = int(run1.rid[5: (len(run1.rid) - len(run1.pids[0]))])
-                #     dt_obj = datetime.fromtimestamp(extracted_timestamp)
-                #     dt_obj = dt_obj.replace(hour=0, minute=0, second=0)
-                #     currentRuns[idx].timestamp = int(dt_obj.timestamp())
-                #     timestamp_counter += 1
-
                 if rid == run1.rid:
 
                     currentRuns[idx].pids = pids
@@ -107,7 +103,7 @@ for dungeon in dungeons:
 
                 elif idx == (len(currentRuns) - 1):
                     currentRuns.append(
-                        MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses,
+                        MythicRun(rid, pids, pnames, dungeon["id"], lvl, time, score, timestamp, pclasses,
                                   affixes))
                     counter += 1
                     break
@@ -115,7 +111,7 @@ for dungeon in dungeons:
         else:
             counter += 1
             currentRuns.append(
-                MythicRun(rid, pids, pnames, int(dungeon["id"][5:8]), lvl, time, score, timestamp, pclasses, affixes))
+                MythicRun(rid, pids, pnames, dungeon["id"], lvl, time, score, timestamp, pclasses, affixes))
 
     print(dungeon["abbr"] + ", " + str(counter) + " new runs added.")
     total_counter += counter

@@ -40,9 +40,6 @@ for run in currentRuns:  # loop through runs
 
         else:  # if exists
             currentPlayers[pidx].name = run.pnames[idx]
-            if currentPlayers[pidx].pclass is None or currentPlayers[pidx].pclass == "noclass":
-                if not run.pclasses is None:
-                    currentPlayers[pidx].pclass = run.pclasses[idx]
 
             playerBruns = currentPlayers[pidx].bruns.copy()
 
@@ -52,10 +49,10 @@ for run in currentRuns:  # loop through runs
                 if pbrid == run.rid:  # skip if run already exists
                     break
 
-                if run.dung == cbrun.dung and run.score < cbrun.score:  # skip if we already have a better run
+                if run.dung == cbrun.dung and run.affixes[1] == cbrun.affixes[1] and run.score < cbrun.score:  # skip if we already have a better run
                     break
 
-                if run.dung == cbrun.dung and run.score >= cbrun.score:  # remove brun if ours better
+                if run.dung == cbrun.dung and run.affixes[1] == cbrun.affixes[1] and run.score >= cbrun.score:  # remove brun if ours better
                     currentPlayers[pidx].bruns.remove(pbrid)
 
                 if idxx == (len(playerBruns) - 1):
@@ -90,13 +87,13 @@ with open('runs.pickle', 'wb') as file:
     print(
         f"there are {(len(currentRuns) - len(newCurrentRuns))} unused entries, wrote {len(currentRuns)} runs & closed runs file")
 
-with open('players.json', 'w') as file:
+with open('players.json', 'w', encoding="utf-8") as file:
     json.dump([ob.__dict__ for ob in currentPlayers], file, ensure_ascii=False, indent=4)
 
-with open('runs.json', 'w') as file:
+with open('runs.json', 'w', encoding="utf-8") as file:
     json.dump([ob.__dict__ for ob in currentRuns], file, ensure_ascii=False, indent=4)
 
-with open('lastUpdated.json', 'w') as file:
+with open('lastUpdated.json', 'w', encoding="utf-8") as file:
     now = datetime.now()
     json.dump(int(now.timestamp()), file, ensure_ascii=False, indent=4)
 
