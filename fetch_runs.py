@@ -41,9 +41,6 @@ for dungeon in dungeons:
             first=dungeon["id"])
         browser.find_element_by_css_selector(dungSelector).click()
     sleep.sleep(1)
-    if dungeon["id"] == "2285_381":
-        print("Skipping {}".format(dungeon["name"]))
-        continue
     soup = BeautifulSoup(browser.page_source, "html.parser")  # parse page
     runs_table = soup.find(id="challenge-results")  # find table
     runs_tbody = runs_table.find("tbody").find_all("tr")
