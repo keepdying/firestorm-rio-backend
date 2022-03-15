@@ -77,10 +77,28 @@ class Player:
 
     def updatefsio(self, currentRuns):
         newio = 0
+        runs = []
         for rid in self.bruns:
             idx, run = returnRun(currentRuns, rid)
+            runs.append(run)
 
-            newio += run.score
+            # newio += run.score
+        
+        for dungeon in dungeons:
+            temp = []
+            for run in runs:
+                if dungeon["id"] == run.dung:
+                    temp.append(run.score)
+            temp.sort(reverse=True)
+            if len(temp) == 0:
+                continue
+            elif len(temp) == 1:
+                newio += (temp[0] * 1.5)
+                continue
+            else:
+                newio += (temp[0] * 1.5)
+                newio += (temp[1] * 0.5)
+
         self.fsio = newio
         self.fsio = round(self.fsio, 2)
 
