@@ -62,17 +62,17 @@ for run in currentRuns:  # loop through runs
 for player in currentPlayers:
     player.updatefsio(currentRuns)  # calculate scores
 
-newCurrentRuns = []  # Delete unused runs
-for idx, run in enumerate(currentRuns):
-    loopBreak = False
-    for player in currentPlayers:
-        for brun in player.bruns:
-            if run.rid == brun:
-                newCurrentRuns.append(run)
-                loopBreak = True
-                break
-        if loopBreak:
-            break
+# newCurrentRuns = []  # Delete unused runs
+# for idx, run in enumerate(currentRuns):
+#     loopBreak = False
+#     for player in currentPlayers:
+#         for brun in player.bruns:
+#             if run.rid == brun:
+#                 newCurrentRuns.append(run)
+#                 loopBreak = True
+#                 break
+#         if loopBreak:
+#             break
 
 currentPlayers.sort(key=lambda x: x.fsio, reverse=True)
 
@@ -85,7 +85,7 @@ with open('runs.pickle', 'wb') as file:
     pickle.dump(currentRuns, file)
     file.close()
     print(
-        f"there are {(len(currentRuns) - len(newCurrentRuns))} unused entries, wrote {len(currentRuns)} runs & closed runs file")
+        f"there are {(len(currentRuns) - len(currentRuns))} unused entries, wrote {len(currentRuns)} runs & closed runs file")
 
 with open('players.json', 'w', encoding="utf-8") as file:
     json.dump([ob.__dict__ for ob in currentPlayers], file, ensure_ascii=False, indent=4)
