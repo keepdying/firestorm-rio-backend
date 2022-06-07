@@ -36,13 +36,13 @@ for dungeon in dungeons:
     affix_counter = 0
     timestamp_counter = 0
     if dungeon["id"] != "2284_380":
-        browser.find_element(by=By.CSS_SELECTOR, value="#pve_carousel > a.right.carousel-control").click
+        browser.find_element(by=By.CSS_SELECTOR, value="#pve_carousel > a.right.carousel-control").click()
         # browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
         sleep.sleep(2)
         dungSelector = "#pve_carousel > div > div.item.active > div.img_slider.dungeon_{first} > img".format(
             first=dungeon["id"])
-        # browser.find_element(by=By.CSS_SELECTOR, value=dungSelector)
-        browser.find_element_by_css_selector(dungSelector).click()
+        browser.find_element(by=By.CSS_SELECTOR, value=dungSelector).click()
+        # browser.find_element_by_css_selector(dungSelector).click()
     sleep.sleep(1)
     soup = BeautifulSoup(browser.page_source, "html.parser")  # parse page
     runs_table = soup.find(id="challenge-results")  # find table
