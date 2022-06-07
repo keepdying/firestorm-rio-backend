@@ -7,7 +7,7 @@ import dill as pickle
 import json
 
 from selenium import webdriver
-
+from selenium.webdriver.common.by import By
 try:
     with open('runs.pickle', 'rb') as file:
         currentRuns = pickle.load(file)
@@ -24,7 +24,8 @@ with open('dungeons.json', 'r') as file:
 browser = webdriver.Chrome()
 browser.get("https://firestorm-servers.com/en/challenge/index/8")
 sleep.sleep(5)
-affixes = browser.find_elements_by_css_selector('#challenge-content > div > a')  # get affix ids
+affixes = browser.find_elements(by=By.CSS_SELECTOR, value="#challenge-content > div > a")  # get affix ids
+# affixes = browser.find_elements_by_css_selector("#challenge-content > div > a")  # get affix ids
 for i, affix in enumerate(affixes):
     affixes[i] = int(affix.get_attribute('href')[28:])
 
@@ -35,11 +36,13 @@ for dungeon in dungeons:
     affix_counter = 0
     timestamp_counter = 0
     if dungeon["id"] != "2284_380":
-        browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
+        browser.find_element(by=By.CSS_SELECTOR, value="#pve_carousel > a.right.carousel-control").click
+        # browser.find_element_by_css_selector("#pve_carousel > a.right.carousel-control").click()
         sleep.sleep(2)
         dungSelector = "#pve_carousel > div > div.item.active > div.img_slider.dungeon_{first} > img".format(
             first=dungeon["id"])
-        browser.find_element_by_css_selector(dungSelector).click()
+        browser.find_element(by=By.CSS_SELECTOR, value=dungSelector)
+        # browser.find_element_by_css_selector(dungSelector).click()
     sleep.sleep(1)
     soup = BeautifulSoup(browser.page_source, "html.parser")  # parse page
     runs_table = soup.find(id="challenge-results")  # find table
