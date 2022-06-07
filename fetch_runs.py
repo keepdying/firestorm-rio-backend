@@ -41,8 +41,8 @@ for dungeon in dungeons:
         sleep.sleep(2)
         dungSelector = "#pve_carousel > div > div.item.active > div.img_slider.dungeon_{first} > img".format(
             first=dungeon["id"])
-        browser.find_element(by=By.CSS_SELECTOR, value=dungSelector)
-        # browser.find_element_by_css_selector(dungSelector).click()
+        # browser.find_element(by=By.CSS_SELECTOR, value=dungSelector)
+        browser.find_element_by_css_selector(dungSelector).click()
     sleep.sleep(1)
     soup = BeautifulSoup(browser.page_source, "html.parser")  # parse page
     runs_table = soup.find(id="challenge-results")  # find table
