@@ -50,7 +50,7 @@ jobs:
         env:
           DISPLAY: :99
           
-      - name: Run update_playes.py
+      - name: Run update_players.py
         run: pipenv run python update_players.py 
                
       - name: Add & Commit
