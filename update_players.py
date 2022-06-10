@@ -82,7 +82,7 @@ with open('players.pickle', 'wb') as file:
     print("wrote {first} players & closed players file".format(first=len(currentPlayers)))
 
 with open('runs.pickle', 'wb') as file:
-    pickle.dump(currentRuns, file)
+    pickle.dump(newCurrentRuns, file)
     file.close()
     print(
         f"There was {len(currentRuns)} total entries. Deleted {(len(currentRuns) - len(newCurrentRuns))} unused entries, wrote {len(newCurrentRuns)} runs & closed runs file")
