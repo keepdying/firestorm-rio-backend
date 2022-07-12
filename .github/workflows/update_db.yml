@@ -76,9 +76,9 @@ jobs:
           cd firestorm-rio
           git config --global user.name "Github Actions"
           git config --global user.email "yunusemre34tr@gmail.com"
-          git add src/runs.json
-          git add src/players.json
-          git add src/lastUpdated.json
+          git add -f src/runs.json
+          git add -f src/players.json
+          git add -f src/lastUpdated.json
           git commit -m "Updated DB"
           git push
 
