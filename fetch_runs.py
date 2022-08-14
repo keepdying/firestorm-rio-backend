@@ -6,7 +6,7 @@ import time as sleep
 import dill as pickle
 import json
 
-from selenium import webdriver
+from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
 try:
     with open('runs.pickle', 'rb') as file:
@@ -21,7 +21,7 @@ with open('dungeons.json', 'r') as file:
     dungeons = json.load(file)
     file.close()
 
-browser = webdriver.Chrome()
+browser = Chrome()
 browser.get("https://firestorm-servers.com/en/challenge/index/8")
 sleep.sleep(5)
 affixes = browser.find_elements(by=By.CSS_SELECTOR, value="#challenge-content > div > a")  # get affix ids
