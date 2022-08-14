@@ -35,8 +35,8 @@ jobs:
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
-          pip install pipenv
-          pipenv install selenium==4.0.0 dill bs4
+          pip install pipenv certifi
+          pipenv install selenium==4.0.0 dill bs4 certifi
           
       - name: Setup Chromedriver
         uses: nanasess/setup-chromedriver@v1.0.5
