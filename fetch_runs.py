@@ -5,9 +5,20 @@ import re
 import time as sleep
 import dill as pickle
 import json
+from sys import exit
 
 from selenium.webdriver import Chrome
 from selenium.webdriver.common.by import By
+
+def writeUpdatesToFile():
+    with open('runs.pickle', 'wb') as file:
+        pickle.dump(currentRuns, file)
+        file.close()
+        # browser.close()
+        print("wrote {first} new entries with total of {second} & closed runs file".format(first=total_counter,
+                                                                                       second=len(currentRuns)))
+    return
+
 try:
     with open('runs.pickle', 'rb') as file:
         currentRuns = pickle.load(file)
@@ -79,6 +90,7 @@ for dungeon in dungeons:
 
         # generate rid
         rid = dungeon["id"][5:8] + str(lvl).zfill(2) + str(timestamp) + str(pids[0])
+        
         # ensure to not write a run twice
         if currentRuns:
             for idx, run1 in enumerate(currentRuns):
@@ -94,8 +106,14 @@ for dungeon in dungeons:
                 if not hasattr(currentRuns[idx], 'affixes'):
                     currentRuns[idx].affixes = None
 
-                if rid == run1.rid:
+                # Sanity Check
+                if (timestamp == run1.timestamp) and (pids[0] == run1.pids[0]) and (dungeon["id"] != run1.dung):
+                    print("Anomaly detected exiting...")
+                    exit(1)
+                    
 
+                if rid == run1.rid:
+                    
                     currentRuns[idx].pids = pids
                     currentRuns[idx].pnames = pnames
 
@@ -115,9 +133,6 @@ for dungeon in dungeons:
 
     print(dungeon["abbr"] + ", " + str(counter) + " new runs added.")
     total_counter += counter
-with open('runs.pickle', 'wb') as file:
-    pickle.dump(currentRuns, file)
-    file.close()
-    # browser.close()
-    print("wrote {first} new entries with total of {second} & closed runs file".format(first=total_counter,
-                                                                                       second=len(currentRuns)))
+
+writeUpdatesToFile()
+exit(0)
